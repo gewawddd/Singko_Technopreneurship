@@ -1,6 +1,6 @@
 # Singko Technopreneurship
 
-Small dashboard-style React app scaffolded with Vite, TypeScript and Tailwind CSS.
+Small dashboard-style React application for monitoring branches, devices, alerts, and reports. Scaffolded with Vite, TypeScript, and Tailwind CSS.
 
 Features
 - Basic layout and pages for monitoring, alerts, reports, and settings

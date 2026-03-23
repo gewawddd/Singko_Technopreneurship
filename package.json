@@ -1,6 +1,7 @@
 {
   "name": "singko-technopreneurship",
   "version": "0.0.1",
+  "description": "Singko Technopreneurship — dashboard for monitoring branches, devices, alerts, and reports. Built with React, Vite, TypeScript, and Tailwind CSS.",
   "private": true,
   "type": "module",
   "scripts": {
