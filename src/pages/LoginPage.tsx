@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ZapIcon, MailIcon, LockIcon, ArrowRightIcon } from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
@@ -27,47 +27,48 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       <motion.div
         initial={{
           opacity: 0,
-          y: 20
+          y: 20,
         }}
         animate={{
           opacity: 1,
-          y: 0
+          y: 0,
         }}
         transition={{
           duration: 0.6,
-          ease: 'easeOut'
+          ease: 'easeOut',
         }}
-        className="w-full max-w-md px-4 z-10">
-        
+        className="w-full max-w-md px-4 z-10"
+      >
         <div className="text-center mb-8">
           <motion.div
             initial={{
-              scale: 0.8
+              scale: 0.8,
             }}
             animate={{
-              scale: 1
+              scale: 1,
             }}
             transition={{
               delay: 0.2,
-              type: 'spring'
+              type: 'spring',
             }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00d4ff]/20 to-blue-600/20 border border-[#00d4ff]/30 backdrop-blur-xl mb-6 relative">
-            
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00d4ff]/20 to-blue-600/20 border border-[#00d4ff]/30 backdrop-blur-xl mb-6 relative"
+          >
             <div className="absolute inset-0 bg-[#00d4ff] blur-xl opacity-20 rounded-2xl"></div>
             <ZapIcon className="w-8 h-8 text-[#00d4ff] relative z-10" />
           </motion.div>
           <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">
             Welcome to <span className="text-gradient-cyan">PowerTrack</span>
           </h1>
-          <p className="text-slate-400 text-sm">
-            Smart Utility Decision-Support System
-          </p>
+          <p className="text-slate-400 text-sm">Smart Utility Decision-Support System</p>
         </div>
 
         <GlassCard className="p-8" glowColor="cyan">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="login-email" className="block text-xs font-medium text-slate-400 mb-1.5 ml-1">
+              <label
+                htmlFor="login-email"
+                className="block text-xs font-medium text-slate-400 mb-1.5 ml-1"
+              >
                 Business Email
               </label>
               <div className="">
@@ -81,21 +82,26 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     required
                     aria-required="true"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     className="bg-transparent outline-none w-full text-white placeholder-slate-500"
-                    placeholder="admin@company.com" />
+                    placeholder="admin@company.com"
+                  />
                 </div>
               </div>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-1.5 ml-1 mr-1">
-                <label htmlFor="login-password" className="block text-xs font-medium text-slate-400">
+                <label
+                  htmlFor="login-password"
+                  className="block text-xs font-medium text-slate-400"
+                >
                   Password
                 </label>
                 <a
                   href="#"
-                  className="text-xs text-[#00d4ff] hover:text-blue-400 transition-colors">
+                  className="text-xs text-[#00d4ff] hover:text-blue-400 transition-colors"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -110,9 +116,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     required
                     aria-required="true"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     className="bg-transparent outline-none w-full text-white placeholder-slate-500"
-                    placeholder="••••••••" />
+                    placeholder="••••••••"
+                  />
                 </div>
               </div>
             </div>
@@ -121,12 +128,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               <input
                 id="remember-me"
                 type="checkbox"
-                className="h-4 w-4 rounded border-white/[0.1] bg-white/[0.05] text-[#00d4ff] focus:ring-[#00d4ff]/50 focus:ring-offset-0" />
-              
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-slate-400">
-                
+                className="h-4 w-4 rounded border-white/[0.1] bg-white/[0.05] text-[#00d4ff] focus:ring-[#00d4ff]/50 focus:ring-offset-0"
+              />
+
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-400">
                 Remember me for 30 days
               </label>
             </div>
@@ -134,22 +139,22 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#00d4ff] to-blue-600 hover:from-[#00b8e6] hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00d4ff] focus:ring-offset-[#060b1d] transition-all shadow-[0_0_20px_rgba(0,212,255,0.3)] hover:shadow-[0_0_25px_rgba(0,212,255,0.5)] disabled:opacity-70 disabled:cursor-not-allowed mt-6">
-              
-              {isLoading ?
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> :
-
-              <>
+              className="w-full flex items-center justify-center py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#00d4ff] to-blue-600 hover:from-[#00b8e6] hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00d4ff] focus:ring-offset-[#060b1d] transition-all shadow-[0_0_20px_rgba(0,212,255,0.3)] hover:shadow-[0_0_25px_rgba(0,212,255,0.5)] disabled:opacity-70 disabled:cursor-not-allowed mt-6"
+            >
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <>
                   Sign In <ArrowRightIcon className="ml-2 w-4 h-4" />
                 </>
-              }
+              )}
             </button>
           </form>
         </GlassCard>
 
         <p className="text-center text-xs text-slate-500 mt-3">
-          Demo credentials: <span className="text-white font-medium">singkoadmin@pup.com</span>
-          {' '} / <span className="text-white font-medium">singkoadmin</span>
+          Demo credentials: <span className="text-white font-medium">singkoadmin@pup.com</span> /{' '}
+          <span className="text-white font-medium">singkoadmin</span>
         </p>
 
         <p className="text-center text-sm text-slate-500 mt-8">
@@ -159,6 +164,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </a>
         </p>
       </motion.div>
-    </div>);
-
+    </div>
+  );
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function Skeleton({ className = '' }: { className?: string }) {
   return (
     <div className={`animate-pulse bg-white/[0.02] rounded-xl ${className}`}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
@@ -12,8 +12,6 @@ import { Sidebar, PageType } from './components/Sidebar';
 import { PrivateRoute } from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 import { Menu } from 'lucide-react';
-
-const STORAGE_KEY = 'powertrack.isLoggedIn';
 
 export function App() {
   const navigate = useNavigate();
@@ -80,7 +78,7 @@ export function App() {
       {isLoggedIn && (
         <Sidebar
           activePage={pathToPage(location.pathname)}
-          onNavigate={(p) => {
+          onNavigate={p => {
             navigate(pageToPath(p));
             setMobileSidebarOpen(false);
           }}
@@ -93,11 +91,16 @@ export function App() {
         />
       )}
 
-      <main className={`flex-1 ${isLoggedIn ? 'md:ml-64' : ''} p-4 md:p-8 overflow-y-auto h-screen relative z-10`}>
+      <main
+        className={`flex-1 ${
+          isLoggedIn ? 'md:ml-64' : ''
+        } p-4 md:p-8 overflow-y-auto h-screen relative z-10`}
+      >
         {isLoggedIn && (
           <button
-            onClick={() => setMobileSidebarOpen((s) => !s)}
-            className="md:hidden fixed top-4 left-4 z-60 p-2 rounded-lg bg-white/5 text-slate-200 hover:bg-white/6">
+            onClick={() => setMobileSidebarOpen(s => !s)}
+            className="md:hidden fixed top-4 left-4 z-60 p-2 rounded-lg bg-white/5 text-slate-200 hover:bg-white/6"
+          >
             <Menu className="w-5 h-5" />
           </button>
         )}
@@ -107,18 +110,66 @@ export function App() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}>
-
+            transition={{ duration: 0.3 }}
+          >
             <Routes>
               <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-              <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-              <Route path="/devices" element={<PrivateRoute><DeviceMonitoringPage /></PrivateRoute>} />
-              <Route path="/alerts" element={<PrivateRoute><AlertsPage /></PrivateRoute>} />
-              <Route path="/reports" element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
-              <Route path="/branches" element={<PrivateRoute><BranchMonitoringPage /></PrivateRoute>} />
-              <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
-              <Route path="/" element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />} />
-              <Route path="*" element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <DashboardPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/devices"
+                element={
+                  <PrivateRoute>
+                    <DeviceMonitoringPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/alerts"
+                element={
+                  <PrivateRoute>
+                    <AlertsPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/reports"
+                element={
+                  <PrivateRoute>
+                    <ReportsPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/branches"
+                element={
+                  <PrivateRoute>
+                    <BranchMonitoringPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <PrivateRoute>
+                    <SettingsPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/"
+                element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />}
+              />
+              <Route
+                path="*"
+                element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />}
+              />
             </Routes>
           </motion.div>
         </AnimatePresence>

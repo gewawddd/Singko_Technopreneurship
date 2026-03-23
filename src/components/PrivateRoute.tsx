@@ -1,8 +1,8 @@
-import React from 'react';
+import type { ReactElement } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export function PrivateRoute({ children }: { children: React.ReactElement }) {
+export function PrivateRoute({ children }: { children: ReactElement }) {
   const { isLoggedIn, loading } = useAuth();
   const location = useLocation();
 

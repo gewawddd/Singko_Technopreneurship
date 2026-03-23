@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'powertrack.isLoggedIn';
 
@@ -20,7 +21,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) === '1';
       setIsLoggedIn(stored);
-    } catch {
+    } catch (e) {
+      // If reading localStorage fails (e.g., privacy mode), default to logged out
+      // and surface the error for debugging when available.
+      // eslint-disable-next-line no-console
+      console.warn('Auth restore failed', e);
       setIsLoggedIn(false);
     } finally {
       setLoading(false);
@@ -31,14 +36,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // simulate any async work (e.g., token exchange); keep API async-friendly
     try {
       localStorage.setItem(STORAGE_KEY, '1');
-    } catch {}
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('Auth login: unable to persist state', e);
+    }
     setIsLoggedIn(true);
   };
 
   const logout = () => {
     try {
       localStorage.removeItem(STORAGE_KEY);
-    } catch {}
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('Auth logout: unable to clear state', e);
+    }
     setIsLoggedIn(false);
   };
 
