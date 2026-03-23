@@ -459,6 +459,7 @@ export function DashboardPage() {
                   
                 </AreaChart>
               </ResponsiveContainer>
+              )}
             </div>
           </GlassCard>
         </motion.div>

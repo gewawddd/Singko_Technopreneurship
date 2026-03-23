@@ -134,6 +134,8 @@ export function Sidebar({ activePage, onNavigate, onLogout, mobileOpen = false, 
           </button>
         </div>
       </div>
-    </div>);
+      </div>
+    </>
+  );
 
 }
