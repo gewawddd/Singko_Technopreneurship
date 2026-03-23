@@ -83,7 +83,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     aria-required="true"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="bg-transparent outline-none w-full text-white placeholder-slate-500"
+                    className="glass-input glass-input--plain w-full"
                     placeholder="admin@company.com"
                   />
                 </div>
@@ -117,7 +117,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     aria-required="true"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="bg-transparent outline-none w-full text-white placeholder-slate-500"
+                    className="glass-input glass-input--plain w-full"
                     placeholder="••••••••"
                   />
                 </div>

@@ -114,7 +114,7 @@ export function DeviceMonitoringPage() {
               aria-label="Search areas"
               type="text"
               placeholder="Search areas..."
-              className="glass-input !pl-16 pr-3 py-2 text-sm w-full max-w-xs md:!pl-16 md:max-w-none md:w-64 relative z-10"
+              className="glass-input glass-input--plain !pl-16 pr-3 py-2 text-sm w-full max-w-xs md:!pl-16 md:max-w-none md:w-64 relative z-10"
             />
           </div>
           <button className="glass-panel !p-2 !rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center">

@@ -9,6 +9,7 @@ import {
   ZapIcon,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 export type PageType = 'dashboard' | 'devices' | 'alerts' | 'reports' | 'branches' | 'settings';
 interface SidebarProps {
   activePage: PageType;
@@ -25,6 +26,7 @@ export function Sidebar({
   mobileOpen = false,
   onRequestClose,
 }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState<boolean>(false);
   const navItems = [
     {
       id: 'dashboard',
@@ -68,7 +70,11 @@ export function Sidebar({
       />
 
       <div
-        className={`w-64 h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-transform duration-300 ${
+        onMouseEnter={() => setCollapsed(true)}
+        onMouseLeave={() => setCollapsed(false)}
+        className={`${
+          collapsed ? 'w-20' : 'w-64'
+        } h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-all duration-300 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0`}
       >
@@ -80,27 +86,31 @@ export function Sidebar({
               <ZapIcon className="w-6 h-6 text-white" />
             </div>
           </div>
-          <span className="text-xl font-bold text-white tracking-wide">
-            Power<span className="text-[#00d4ff]">Track</span>
-          </span>
-          <button
-            onClick={onRequestClose}
-            className="ml-auto md:hidden p-2 rounded-lg text-slate-300 hover:bg-white/[0.04]"
-            aria-label="Close menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+          {!collapsed && (
+            <span className="text-xl font-bold text-white tracking-wide">
+              Power<span className="text-[#00d4ff]">Track</span>
+            </span>
+          )}
+          <div className="ml-auto">
+            <button
+              onClick={onRequestClose}
+              className="ml-0 md:hidden p-2 rounded-lg text-slate-300 hover:bg-white/[0.04]"
+              aria-label="Close menu"
             >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -112,7 +122,9 @@ export function Sidebar({
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
+                className={`w-full flex items-center ${
+                  collapsed ? 'justify-center' : 'justify-start'
+                } space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
                   isActive
                     ? 'bg-white/[0.08] text-[#00d4ff]'
                     : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
@@ -130,7 +142,7 @@ export function Sidebar({
                   }`}
                 />
 
-                <span className="font-medium text-sm">{item.label}</span>
+                {!collapsed && <span className="font-medium text-sm">{item.label}</span>}
               </button>
             );
           })}
