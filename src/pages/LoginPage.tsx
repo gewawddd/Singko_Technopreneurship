@@ -70,18 +70,19 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               <label className="block text-xs font-medium text-slate-400 mb-1.5 ml-1">
                 Business Email
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <MailIcon className="h-4 w-4 text-slate-500" />
+              <div className="">
+                <div className="flex items-center bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3">
+                  <div className="flex items-center justify-center mr-3">
+                    <MailIcon className="h-4 w-4 text-slate-500" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="bg-transparent outline-none w-full text-white placeholder-slate-500"
+                    placeholder="admin@company.com" />
                 </div>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="glass-input w-full pl-11"
-                  placeholder="admin@company.com" />
-                
               </div>
             </div>
 
@@ -97,18 +98,19 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                   Forgot password?
                 </a>
               </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <LockIcon className="h-4 w-4 text-slate-500" />
+              <div className="">
+                <div className="flex items-center bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3">
+                  <div className="flex items-center justify-center mr-3">
+                    <LockIcon className="h-4 w-4 text-slate-500" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-transparent outline-none w-full text-white placeholder-slate-500"
+                    placeholder="••••••••" />
                 </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="glass-input w-full pl-11"
-                  placeholder="••••••••" />
-                
               </div>
             </div>
 
@@ -141,6 +143,11 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             </button>
           </form>
         </GlassCard>
+
+        <p className="text-center text-xs text-slate-500 mt-3">
+          Demo credentials: <span className="text-white font-medium">singkoadmin@pup.com</span>
+          {' '} / <span className="text-white font-medium">singkoadmin</span>
+        </p>
 
         <p className="text-center text-sm text-slate-500 mt-8">
           Don't have an account?{' '}
