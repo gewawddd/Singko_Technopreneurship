@@ -1,4 +1,4 @@
-import React, { useState, Children } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   AlertTriangleIcon,
@@ -6,8 +6,9 @@ import {
   ThermometerIcon,
   WalletIcon,
   ClockIcon,
-  CheckCircleIcon } from
-'lucide-react';
+  CheckCircleIcon,
+  LightbulbIcon
+} from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
 import { StatusBadge, StatusType } from '../components/StatusBadge';
 const alertsData = [
@@ -264,7 +265,7 @@ export function AlertsPage() {
 
 }
 // Helper icon
-function LightbulbIcon(props: any) {
+function LightbulbIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

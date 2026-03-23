@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import {
   SearchIcon,
@@ -7,9 +7,8 @@ import {
   WrenchIcon,
   WindIcon,
   PackageIcon,
-  MonitorIcon,
-  TruckIcon } from
-'lucide-react';
+  TruckIcon
+} from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
 import { StatusBadge, StatusType } from '../components/StatusBadge';
 const areas = [

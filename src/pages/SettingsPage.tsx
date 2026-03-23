@@ -1,12 +1,11 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import {
   UserIcon,
   BellIcon,
-  ShieldIcon,
   SlidersIcon,
-  SaveIcon } from
-'lucide-react';
+  SaveIcon
+} from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
 export function SettingsPage() {
   const containerVariants = {

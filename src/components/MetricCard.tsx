@@ -28,12 +28,6 @@ export function MetricCard({
   trend === 'down' ?
   TrendingDownIcon :
   MinusIcon;
-  const trendColor =
-  trend === 'up' ?
-  'text-red-400' :
-  trend === 'down' ?
-  'text-emerald-400' :
-  'text-slate-400';
   // For power/cost, down is usually good (green), up is bad (red).
   // We'll invert this logic if the title implies otherwise, but for simplicity we'll stick to this standard for energy monitoring.
   const isPositiveTrend = trend === 'down';
