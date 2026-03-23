@@ -9,42 +9,41 @@ import { ReportsPage } from './pages/ReportsPage';
 import { BranchMonitoringPage } from './pages/BranchMonitoringPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { Sidebar, PageType } from './components/Sidebar';
+import { PrivateRoute } from './components/PrivateRoute';
+import { useAuth } from './context/AuthContext';
+import { Menu } from 'lucide-react';
 
 const STORAGE_KEY = 'powertrack.isLoggedIn';
 
 export function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === '1';
-    } catch {
-      return false;
-    }
-  });
+  const { isLoggedIn, loading, login, logout } = useAuth();
 
   useEffect(() => {
-    // If user is not logged in and not on /login, redirect to /login
+    if (loading) return; // wait for restore
     if (!isLoggedIn && location.pathname !== '/login') {
       navigate('/login', { replace: true });
     }
-  }, [isLoggedIn, location.pathname, navigate]);
+  }, [isLoggedIn, loading, location.pathname, navigate]);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    try {
-      localStorage.setItem(STORAGE_KEY, '1');
-    } catch {}
+  const handleLogin = async () => {
+    await login();
     navigate('/dashboard', { replace: true });
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {}
+    logout();
     navigate('/login', { replace: true });
   };
+
+  // mobile sidebar state
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  useEffect(() => {
+    if (!isLoggedIn) setMobileSidebarOpen(false);
+  }, [isLoggedIn]);
+
+  if (loading) return null;
 
   const pathToPage = (path: string): PageType => {
     if (path.startsWith('/devices')) return 'devices';
@@ -81,12 +80,27 @@ export function App() {
       {isLoggedIn && (
         <Sidebar
           activePage={pathToPage(location.pathname)}
-          onNavigate={(p) => navigate(pageToPath(p))}
-          onLogout={handleLogout}
+          onNavigate={(p) => {
+            navigate(pageToPath(p));
+            setMobileSidebarOpen(false);
+          }}
+          onLogout={() => {
+            handleLogout();
+            setMobileSidebarOpen(false);
+          }}
+          mobileOpen={mobileSidebarOpen}
+          onRequestClose={() => setMobileSidebarOpen(false)}
         />
       )}
 
-      <main className={`flex-1 ${isLoggedIn ? 'ml-64' : ''} p-8 overflow-y-auto h-screen relative z-10`}>
+      <main className={`flex-1 ${isLoggedIn ? 'md:ml-64' : ''} p-4 md:p-8 overflow-y-auto h-screen relative z-10`}>
+        {isLoggedIn && (
+          <button
+            onClick={() => setMobileSidebarOpen((s) => !s)}
+            className="md:hidden fixed top-4 left-4 z-60 p-2 rounded-lg bg-white/5 text-slate-200 hover:bg-white/6">
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -97,30 +111,12 @@ export function App() {
 
             <Routes>
               <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-              <Route
-                path="/dashboard"
-                element={isLoggedIn ? <DashboardPage /> : <Navigate to="/login" replace />}
-              />
-              <Route
-                path="/devices"
-                element={isLoggedIn ? <DeviceMonitoringPage /> : <Navigate to="/login" replace />}
-              />
-              <Route
-                path="/alerts"
-                element={isLoggedIn ? <AlertsPage /> : <Navigate to="/login" replace />}
-              />
-              <Route
-                path="/reports"
-                element={isLoggedIn ? <ReportsPage /> : <Navigate to="/login" replace />}
-              />
-              <Route
-                path="/branches"
-                element={isLoggedIn ? <BranchMonitoringPage /> : <Navigate to="/login" replace />}
-              />
-              <Route
-                path="/settings"
-                element={isLoggedIn ? <SettingsPage /> : <Navigate to="/login" replace />}
-              />
+              <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+              <Route path="/devices" element={<PrivateRoute><DeviceMonitoringPage /></PrivateRoute>} />
+              <Route path="/alerts" element={<PrivateRoute><AlertsPage /></PrivateRoute>} />
+              <Route path="/reports" element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
+              <Route path="/branches" element={<PrivateRoute><BranchMonitoringPage /></PrivateRoute>} />
+              <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
               <Route path="/" element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />} />
               <Route path="*" element={<Navigate to={isLoggedIn ? '/dashboard' : '/login'} replace />} />
             </Routes>

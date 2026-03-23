@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   ZapIcon,
@@ -32,6 +32,7 @@ import {
 import { MetricCard } from '../components/MetricCard';
 import { GlassCard } from '../components/GlassCard';
 import { StatusBadge, StatusType } from '../components/StatusBadge';
+import { Skeleton } from '../components/Skeleton';
 const chartData = [
 {
   time: '12 AM',
@@ -206,6 +207,11 @@ const branchOverviewData = [
 }];
 
 export function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
   const containerVariants = {
     hidden: {
       opacity: 0
@@ -363,9 +369,14 @@ export function DashboardPage() {
               </div>
             </div>
             <div className="flex-1 min-h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={chartData}
+              {isLoading ? (
+                <div className="p-4 h-full">
+                  <Skeleton className="min-h-[300px] w-full" />
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={chartData}
                   margin={{
                     top: 10,
                     right: 10,

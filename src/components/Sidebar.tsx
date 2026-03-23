@@ -21,8 +21,11 @@ interface SidebarProps {
   activePage: PageType;
   onNavigate: (page: PageType) => void;
   onLogout: () => void;
+  // mobile support
+  mobileOpen?: boolean;
+  onRequestClose?: () => void;
 }
-export function Sidebar({ activePage, onNavigate, onLogout }: SidebarProps) {
+export function Sidebar({ activePage, onNavigate, onLogout, mobileOpen = false, onRequestClose }: SidebarProps) {
   const navItems = [
   {
     id: 'dashboard',
@@ -56,7 +59,11 @@ export function Sidebar({ activePage, onNavigate, onLogout }: SidebarProps) {
   }] as
   const;
   return (
-    <div className="w-64 h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50">
+    <>
+      {/* backdrop for mobile */}
+      <div className={`md:hidden fixed inset-0 bg-black/40 z-40 transition-opacity ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} onClick={onRequestClose} />
+
+      <div className={`w-64 h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
       {/* Logo Area */}
       <div className="p-6 flex items-center space-x-3 mb-6">
         <div className="relative">
@@ -68,6 +75,14 @@ export function Sidebar({ activePage, onNavigate, onLogout }: SidebarProps) {
         <span className="text-xl font-bold text-white tracking-wide">
           Power<span className="text-[#00d4ff]">Track</span>
         </span>
+        <button
+          onClick={onRequestClose}
+          className="ml-auto md:hidden p-2 rounded-lg text-slate-300 hover:bg-white/[0.04]"
+          aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
       </div>
 
       {/* Navigation */}

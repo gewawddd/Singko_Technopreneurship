@@ -109,7 +109,10 @@ export function DeviceMonitoringPage() {
         <div className="flex space-x-3 items-center min-w-0">
           <div className="relative min-w-0 group">
             <SearchIcon className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 transition-transform duration-200 ease-out group-focus-within:-translate-x-1 z-0 pointer-events-none" />
+            <label htmlFor="search-areas" className="sr-only">Search areas</label>
             <input
+              id="search-areas"
+              aria-label="Search areas"
               type="text"
               placeholder="Search areas..."
               className="glass-input !pl-16 pr-3 py-2 text-sm w-full max-w-xs md:!pl-16 md:max-w-none md:w-64 relative z-10" />

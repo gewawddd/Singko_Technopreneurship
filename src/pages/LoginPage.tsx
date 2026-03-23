@@ -67,7 +67,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         <GlassCard className="p-8" glowColor="cyan">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 ml-1">
+              <label htmlFor="login-email" className="block text-xs font-medium text-slate-400 mb-1.5 ml-1">
                 Business Email
               </label>
               <div className="">
@@ -76,8 +76,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     <MailIcon className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
+                    id="login-email"
                     type="email"
                     required
+                    aria-required="true"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-transparent outline-none w-full text-white placeholder-slate-500"
@@ -88,13 +90,12 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
             <div>
               <div className="flex justify-between items-center mb-1.5 ml-1 mr-1">
-                <label className="block text-xs font-medium text-slate-400">
+                <label htmlFor="login-password" className="block text-xs font-medium text-slate-400">
                   Password
                 </label>
                 <a
                   href="#"
                   className="text-xs text-[#00d4ff] hover:text-blue-400 transition-colors">
-                  
                   Forgot password?
                 </a>
               </div>
@@ -104,8 +105,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     <LockIcon className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
+                    id="login-password"
                     type="password"
                     required
+                    aria-required="true"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="bg-transparent outline-none w-full text-white placeholder-slate-500"

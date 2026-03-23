@@ -25,6 +25,14 @@ export function GlassCard({
   const hoverClasses = hover ?
   'hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 cursor-pointer hover:-translate-y-1' :
   '';
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <motion.div
       whileHover={
@@ -35,8 +43,10 @@ export function GlassCard({
       {}
       }
       onClick={onClick}
-      className={`glass-panel rounded-2xl p-6 ${glowClasses[glowColor]} ${hoverClasses} ${className}`}>
-      
+      onKeyDown={handleKeyDown}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      className={`glass-panel rounded-2xl p-6 ${glowClasses[glowColor]} ${hoverClasses} ${className} focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00d4ff]/40`}>
       {children}
     </motion.div>);
 
