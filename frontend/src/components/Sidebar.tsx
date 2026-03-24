@@ -26,7 +26,6 @@ export function Sidebar({
   mobileOpen = false,
   onRequestClose,
 }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
   const navItems = [
     {
       id: 'dashboard',
@@ -63,20 +62,14 @@ export function Sidebar({
     <>
       {/* backdrop for mobile */}
       <div
-        className={`md:hidden fixed inset-0 bg-black/40 z-40 transition-opacity ${
-          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`md:hidden fixed inset-0 bg-black/40 z-40 transition-opacity ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={onRequestClose}
       />
 
       <div
-        onMouseEnter={() => setCollapsed(true)}
-        onMouseLeave={() => setCollapsed(false)}
-        className={`${
-          collapsed ? 'w-20' : 'w-64'
-        } h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-all duration-300 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`w-64 h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-all duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
         {/* Logo Area */}
         <div className="p-6 flex items-center space-x-3 mb-6">
@@ -86,11 +79,9 @@ export function Sidebar({
               <ZapIcon className="w-6 h-6 text-white" />
             </div>
           </div>
-          {!collapsed && (
-            <span className="text-xl font-bold text-white tracking-wide">
-              Power<span className="text-[#00d4ff]">Track</span>
-            </span>
-          )}
+          <span className="text-xl font-bold text-white tracking-wide">
+            Power<span className="text-[#00d4ff]">Track</span>
+          </span>
           <div className="ml-auto">
             <button
               onClick={onRequestClose}
@@ -122,13 +113,10 @@ export function Sidebar({
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center ${
-                  collapsed ? 'justify-center' : 'justify-start'
-                } space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
-                  isActive
+                className={`w-full flex items-center justify-start space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${isActive
                     ? 'bg-white/[0.08] text-[#00d4ff]'
                     : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
-                }`}
+                  }`}
               >
                 {isActive && (
                   <motion.div
@@ -137,12 +125,11 @@ export function Sidebar({
                   />
                 )}
                 <Icon
-                  className={`w-5 h-5 ${
-                    isActive ? 'text-[#00d4ff]' : 'text-slate-400 group-hover:text-slate-200'
-                  }`}
+                  className={`w-5 h-5 ${isActive ? 'text-[#00d4ff]' : 'text-slate-400 group-hover:text-slate-200'
+                    }`}
                 />
 
-                {!collapsed && <span className="font-medium text-sm">{item.label}</span>}
+                <span className="font-medium text-sm">{item.label}</span>
               </button>
             );
           })}
