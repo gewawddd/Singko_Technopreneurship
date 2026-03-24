@@ -1,4 +1,4 @@
-// React not required directly (using JSX transform)
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   SearchIcon,
@@ -69,6 +69,19 @@ const areas = [
 ];
 
 export function DeviceMonitoringPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [warningOnly, setWarningOnly] = useState(false);
+
+  const filteredAreas = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    return areas.filter(area => {
+      const matchesSearch =
+        normalizedQuery.length === 0 || area.name.toLowerCase().includes(normalizedQuery);
+      const matchesStatus = !warningOnly || area.status === 'warning';
+      return matchesSearch && matchesStatus;
+    });
+  }, [searchQuery, warningOnly]);
+
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -114,17 +127,28 @@ export function DeviceMonitoringPage() {
               aria-label="Search areas"
               type="text"
               placeholder="Search areas..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               className="glass-input glass-input--plain !pl-16 pr-3 py-2 text-sm w-full max-w-xs md:!pl-16 md:max-w-none md:w-64 relative z-10"
             />
           </div>
-          <button className="glass-panel !p-2 !rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center">
+          <button
+            onClick={() => setWarningOnly(prev => !prev)}
+            className={`glass-panel !p-2 !rounded-xl transition-colors flex items-center justify-center ${
+              warningOnly
+                ? 'text-amber-300 bg-amber-500/10 border-amber-500/30'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.08]'
+            }`}
+            aria-pressed={warningOnly}
+            title={warningOnly ? 'Showing warning areas only' : 'Show warning areas only'}
+          >
             <FilterIcon className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {areas.map(area => {
+        {filteredAreas.map(area => {
           const Icon = area.icon;
           const glowColor =
             area.status === 'warning' ? 'amber' : area.status === 'critical' ? 'red' : 'none';
@@ -193,6 +217,15 @@ export function DeviceMonitoringPage() {
           );
         })}
       </div>
+
+      {filteredAreas.length === 0 && (
+        <GlassCard className="!p-8 text-center" glowColor="none">
+          <p className="text-white font-medium">No matching areas found</p>
+          <p className="text-slate-400 text-sm mt-1">
+            Try a different search term or turn off the warning-only filter.
+          </p>
+        </GlassCard>
+      )}
     </motion.div>
   );
 }

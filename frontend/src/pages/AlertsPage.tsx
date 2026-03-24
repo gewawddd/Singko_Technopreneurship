@@ -90,6 +90,12 @@ const alertsData = [
 
 export function AlertsPage() {
   const [filter, setFilter] = useState<'all' | 'critical' | 'warning' | 'resolved'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const criticalCount = alertsData.filter(alert => alert.type === 'critical').length;
+  const warningCount = alertsData.filter(alert => alert.type === 'warning').length;
+  const resolvedTodayCount = 0;
+
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -112,6 +118,14 @@ export function AlertsPage() {
     },
   };
   const filteredAlerts = alertsData.filter(alert => {
+    const query = searchQuery.trim().toLowerCase();
+    const matchesQuery =
+      query.length === 0 ||
+      alert.title.toLowerCase().includes(query) ||
+      alert.location.toLowerCase().includes(query) ||
+      alert.description.toLowerCase().includes(query);
+
+    if (!matchesQuery) return false;
     if (filter === 'all') return true;
     if (filter === 'resolved') return false; // Mock data has no resolved state
     return alert.type === filter;
@@ -133,38 +147,48 @@ export function AlertsPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <GlassCard className="!p-4 text-center">
-          <div className="text-2xl font-bold text-white">12</div>
+          <div className="text-2xl font-bold text-white">{alertsData.length}</div>
           <div className="text-xs text-slate-400 mt-1">Total Alerts</div>
         </GlassCard>
         <GlassCard className="!p-4 text-center border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.1)]">
-          <div className="text-2xl font-bold text-red-400">2</div>
+          <div className="text-2xl font-bold text-red-400">{criticalCount}</div>
           <div className="text-xs text-slate-400 mt-1">Critical</div>
         </GlassCard>
         <GlassCard className="!p-4 text-center border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-          <div className="text-2xl font-bold text-amber-400">5</div>
+          <div className="text-2xl font-bold text-amber-400">{warningCount}</div>
           <div className="text-xs text-slate-400 mt-1">Warnings</div>
         </GlassCard>
         <GlassCard className="!p-4 text-center border-emerald-500/20">
-          <div className="text-2xl font-bold text-emerald-400">8</div>
+          <div className="text-2xl font-bold text-emerald-400">{resolvedTodayCount}</div>
           <div className="text-xs text-slate-400 mt-1">Resolved Today</div>
         </GlassCard>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex space-x-2 bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.05] w-fit">
-        {(['all', 'critical', 'warning', 'resolved'] as const).map(tab => (
-          <button
-            key={tab}
-            onClick={() => setFilter(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
-              filter === tab
-                ? 'bg-white/[0.1] text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+        <div className="flex space-x-2 bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.05] w-fit">
+          {(['all', 'critical', 'warning', 'resolved'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setFilter(tab)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
+                filter === tab
+                  ? 'bg-white/[0.1] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="Search alerts..."
+          className="glass-input w-full md:w-72"
+          aria-label="Search alerts"
+        />
       </div>
 
       {/* Alerts List */}
@@ -241,7 +265,7 @@ export function AlertsPage() {
         })}
         {filteredAlerts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-slate-400">No alerts found for this filter.</p>
+            <p className="text-slate-400">No alerts found for this filter and search.</p>
           </div>
         )}
       </div>

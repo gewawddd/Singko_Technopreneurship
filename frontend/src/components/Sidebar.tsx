@@ -9,7 +9,7 @@ import {
   ZapIcon,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 export type PageType = 'dashboard' | 'devices' | 'alerts' | 'reports' | 'branches' | 'settings';
 interface SidebarProps {
   activePage: PageType;
@@ -26,6 +26,8 @@ export function Sidebar({
   mobileOpen = false,
   onRequestClose,
 }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(true);
+
   const navItems = [
     {
       id: 'dashboard',
@@ -68,7 +70,9 @@ export function Sidebar({
       />
 
       <div
-        className={`w-64 h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-all duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        onMouseEnter={() => setCollapsed(false)}
+        onMouseLeave={() => setCollapsed(true)}
+        className={`w-64 ${collapsed ? 'md:w-20' : 'md:w-64'} h-screen fixed left-0 top-0 glass-panel !rounded-none !border-y-0 !border-l-0 flex flex-col z-50 transform transition-all duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0`}
       >
         {/* Logo Area */}
@@ -79,9 +83,11 @@ export function Sidebar({
               <ZapIcon className="w-6 h-6 text-white" />
             </div>
           </div>
-          <span className="text-xl font-bold text-white tracking-wide">
-            Power<span className="text-[#00d4ff]">Track</span>
-          </span>
+          {!collapsed && (
+            <span className="text-xl font-bold text-white tracking-wide">
+              Power<span className="text-[#00d4ff]">Track</span>
+            </span>
+          )}
           <div className="ml-auto">
             <button
               onClick={onRequestClose}
@@ -113,7 +119,7 @@ export function Sidebar({
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center justify-start space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${isActive
+                className={`w-full flex items-center ${collapsed ? 'justify-center' : 'justify-start'} space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${isActive
                     ? 'bg-white/[0.08] text-[#00d4ff]'
                     : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'
                   }`}
@@ -129,7 +135,7 @@ export function Sidebar({
                     }`}
                 />
 
-                <span className="font-medium text-sm">{item.label}</span>
+                {!collapsed && <span className="font-medium text-sm">{item.label}</span>}
               </button>
             );
           })}
@@ -137,14 +143,16 @@ export function Sidebar({
 
         {/* User Area */}
         <div className="p-4 mt-auto border-t border-white/[0.08]">
-          <div className="flex items-center p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+          <div className={`flex items-center p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] ${collapsed ? 'justify-center' : ''}`}>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-inner">
               AD
             </div>
-            <div className="ml-3 flex-1 overflow-hidden">
-              <p className="text-sm font-medium text-white truncate">Admin User</p>
-              <p className="text-xs text-slate-500 truncate">admin@powertrack.io</p>
-            </div>
+            {!collapsed && (
+              <div className="ml-3 flex-1 overflow-hidden">
+                <p className="text-sm font-medium text-white truncate">Admin User</p>
+                <p className="text-xs text-slate-500 truncate">admin@powertrack.io</p>
+              </div>
+            )}
             <button
               onClick={onLogout}
               className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"

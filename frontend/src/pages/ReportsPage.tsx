@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CalendarIcon, DownloadIcon, LightbulbIcon, TrendingDownIcon } from 'lucide-react';
 import {
@@ -45,6 +45,23 @@ const monthlyData = [
   },
 ];
 
+const weeklyData = [
+  { day: 'W1', usage: 770 },
+  { day: 'W2', usage: 810 },
+  { day: 'W3', usage: 745 },
+  { day: 'W4', usage: 820 },
+];
+
+const dailyData = [
+  { day: 'Mon', usage: 104 },
+  { day: 'Tue', usage: 116 },
+  { day: 'Wed', usage: 121 },
+  { day: 'Thu', usage: 98 },
+  { day: 'Fri', usage: 132 },
+  { day: 'Sat', usage: 92 },
+  { day: 'Sun', usage: 88 },
+];
+
 const areaData = [
   {
     name: 'Air Con',
@@ -70,6 +87,32 @@ const areaData = [
 
 export function ReportsPage() {
   const [view, setView] = useState<'daily' | 'weekly' | 'monthly'>('monthly');
+
+  const usageData = useMemo(() => {
+    if (view === 'daily') return dailyData;
+    if (view === 'weekly') return weeklyData;
+    return monthlyData;
+  }, [view]);
+
+  const periodLabel =
+    view === 'daily' ? 'Last 7 Days' : view === 'weekly' ? 'Last 4 Weeks' : 'Oct 1 - Oct 31, 2023';
+
+  const totalUsage = useMemo(
+    () => usageData.reduce((sum, point) => sum + point.usage, 0),
+    [usageData]
+  );
+
+  const averageUsage = useMemo(
+    () => (usageData.length ? totalUsage / usageData.length : 0),
+    [totalUsage, usageData]
+  );
+
+  const projectedCost = useMemo(() => {
+    const roundedUsage = Math.round(totalUsage);
+    const multiplier = view === 'daily' ? 14 : view === 'weekly' ? 4.5 : 1;
+    return Math.round(roundedUsage * multiplier * 14);
+  }, [totalUsage, view]);
+
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -106,7 +149,7 @@ export function ReportsPage() {
         <div className="flex space-x-3">
           <div className="flex items-center space-x-2 bg-white/[0.03] px-4 py-2 rounded-xl border border-white/[0.05] text-sm text-slate-300">
             <CalendarIcon className="w-4 h-4 text-[#00d4ff]" />
-            <span>Oct 1 - Oct 31, 2023</span>
+            <span>{periodLabel}</span>
           </div>
           <button className="flex items-center space-x-2 bg-gradient-to-r from-[#00d4ff]/20 to-blue-600/20 hover:from-[#00d4ff]/30 hover:to-blue-600/30 text-white px-4 py-2 rounded-xl border border-[#00d4ff]/30 transition-all">
             <DownloadIcon className="w-4 h-4" />
@@ -120,18 +163,18 @@ export function ReportsPage() {
         <GlassCard className="!p-5">
           <p className="text-sm text-slate-400 mb-1">Total Usage</p>
           <p className="text-2xl font-bold text-white">
-            3,450 <span className="text-sm font-normal text-slate-500">kWh</span>
+            {Math.round(totalUsage).toLocaleString()} <span className="text-sm font-normal text-slate-500">kWh</span>
           </p>
         </GlassCard>
         <GlassCard className="!p-5">
           <p className="text-sm text-slate-400 mb-1">Avg Daily</p>
           <p className="text-2xl font-bold text-white">
-            115 <span className="text-sm font-normal text-slate-500">kWh</span>
+            {Math.round(averageUsage).toLocaleString()} <span className="text-sm font-normal text-slate-500">kWh</span>
           </p>
         </GlassCard>
         <GlassCard className="!p-5">
           <p className="text-sm text-slate-400 mb-1">Cost This Period</p>
-          <p className="text-2xl font-bold text-white">₱48,250</p>
+          <p className="text-2xl font-bold text-white">₱{projectedCost.toLocaleString()}</p>
         </GlassCard>
         <GlassCard className="!p-5 border-emerald-500/20 bg-emerald-500/5">
           <p className="text-sm text-emerald-400 mb-1">Savings vs Last Period</p>
@@ -164,7 +207,7 @@ export function ReportsPage() {
           <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
-                data={monthlyData}
+                data={usageData}
                 margin={{
                   top: 10,
                   right: 10,

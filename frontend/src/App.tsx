@@ -41,7 +41,13 @@ export function App() {
     if (!isLoggedIn) setMobileSidebarOpen(false);
   }, [isLoggedIn]);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-[#060b1d] via-[#0a1128] to-[#0f1535] text-slate-100 flex items-center justify-center">
+        <div className="glass-panel rounded-2xl px-6 py-4 text-sm text-slate-300">Loading workspace...</div>
+      </div>
+    );
+  }
 
   const pathToPage = (path: string): PageType => {
     if (path.startsWith('/devices')) return 'devices';
@@ -94,12 +100,13 @@ export function App() {
       <main
         className={`flex-1 ${
           isLoggedIn ? 'md:ml-64' : ''
-        } p-4 md:p-8 overflow-y-auto h-screen relative z-10`}
+        } p-4 md:p-8 overflow-y-auto h-screen relative z-10 pt-16 md:pt-8`}
       >
         {isLoggedIn && (
           <button
             onClick={() => setMobileSidebarOpen(s => !s)}
-            className="md:hidden fixed top-4 left-4 z-60 p-2 rounded-lg bg-white/5 text-slate-200 hover:bg-white/6"
+            className="md:hidden fixed top-4 left-4 z-[60] p-2 rounded-lg bg-white/5 text-slate-200 hover:bg-white/10 border border-white/10"
+            aria-label="Toggle sidebar menu"
           >
             <Menu className="w-5 h-5" />
           </button>
